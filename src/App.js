@@ -165,17 +165,23 @@ function App() {
     document.onkeydown = (keydown)=>{
 
       //console.log("EVENT")
-      if(keydown.key=="Escape"){
-        setMenu("")
-        setDrawing("")
-        global.graph.canvas.drawing = false
-        global.graph.canvas.selectToolActive = false
-        setSelectToolActive(global.graph.canvas.selectToolActive)
-      }else{
-        //console.log(keydown)
+      switch (keydown.key) {
+        case "Escape":
+          resetControls();
+        break;
+        default:
+          console.log(keydown);
+        break;
       }
-
     }
+
+function resetControls() {
+    setMenu("")
+    setDrawing("")
+    global.graph.canvas.drawing = false
+    global.graph.canvas.selectToolActive = false
+    setSelectToolActive(global.graph.canvas.selectToolActive)
+}
 
 
 const [{ isOver, isOverCurrent }, drop] = useDrop({
