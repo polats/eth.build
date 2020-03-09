@@ -120,7 +120,6 @@ function App() {
 
   const [readQr, setReadQr] = React.useState(false);
 
-  const [live, setLive] = React.useState();
   const [liteGraph, setLiteGraph] = React.useState();
   const [liteGraphCanvas, setLiteGraphCanvas] = React.useState();
   const [playing, setPlaying] = React.useState(true);
@@ -139,14 +138,6 @@ function App() {
     setCurrentScreenShot(canvasImg);
     setOpenSaveDialog(true);
   }
-
-  let showLibrary = localStorage.getItem("eth.build.showLibrary");
-  if(showLibrary=="true") showLibrary=true
-  else if(showLibrary=="false") showLibrary=false
-  //console.log("showLibrary",showLibrary)
-  const [showVideoLibrary, setShowVideoLibrary] = React.useState(showLibrary);
-  global.showLibrary=showLibrary
-
 
   const dynamicWidth = window.innerWidth/3
   /*
@@ -169,11 +160,63 @@ function App() {
         case "Escape":
           resetControls();
         break;
+        case "`":
+        case "~":
+          toggleDemoMode();
         default:
-          console.log(keydown);
+          // console.log(keydown);
         break;
       }
     }
+
+    const [{ isOver, isOverCurrent }, drop] = useDrop({
+      accept: "node",
+      drop(item, monitor) {
+        //console.log("DROP!",item.monitor)
+        const didDrop = monitor.didDrop()
+        if (didDrop) {
+          return
+        }
+      },
+      collect: monitor => ({
+        isOver: monitor.isOver(),
+        isOverCurrent: monitor.isOver({ shallow: true }),
+      }),
+    })
+
+    const [{ isOver2, isOverCurrent2 }, drop2] = useDrop({
+      accept: "node",
+      drop(item, monitor) {
+        //console.log("DROP!",item.monitor)
+        const didDrop = monitor.didDrop()
+        if (didDrop) {
+          return
+        }
+      },
+      collect: monitor => ({
+        isOver2: monitor.isOver(),
+        isOverCurrent2: monitor.isOver({ shallow: true }),
+      }),
+    })
+
+// react state variables affected by local storage
+const [showVideoLibrary, setShowVideoLibrary] = React.useState();
+const [live, setLive] = React.useState();
+
+function initializeSettings() {
+  let showLibrary = localStorage.getItem("eth.build.showLibrary");
+  let initialMode = localStorage.getItem("liveMode");
+
+  setShowVideoLibrary(showLibrary === 'true');
+  setLive(initialMode);
+
+  if (initialMode === "View") {
+    toggleLiveMode();
+  }
+
+  // set some settings as global variables
+  global.showLibrary = showLibrary;
+}
 
 function resetControls() {
     setMenu("")
@@ -183,37 +226,17 @@ function resetControls() {
     setSelectToolActive(global.graph.canvas.selectToolActive)
 }
 
+function toggleDemoMode() {
 
-const [{ isOver, isOverCurrent }, drop] = useDrop({
-  accept: "node",
-  drop(item, monitor) {
-    //console.log("DROP!",item.monitor)
-    const didDrop = monitor.didDrop()
-    if (didDrop) {
-      return
-    }
-  },
-  collect: monitor => ({
-    isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({ shallow: true }),
-  }),
-})
 
-const [{ isOver2, isOverCurrent2 }, drop2] = useDrop({
-  accept: "node",
-  drop(item, monitor) {
-    //console.log("DROP!",item.monitor)
-    const didDrop = monitor.didDrop()
-    if (didDrop) {
-      return
-    }
-  },
-  collect: monitor => ({
-    isOver2: monitor.isOver(),
-    isOverCurrent2: monitor.isOver({ shallow: true }),
-  }),
-})
+}
 
+function toggleLiveMode() {
+  global.graph.canvas.switchLiveMode(true);
+  setLive(!live);
+}
+
+// main code starts here
 React.useEffect(()=>{
   console.log("MOUNT",LiteGraphJS)
 
@@ -314,12 +337,7 @@ React.useEffect(()=>{
     }
   }
 
-  // handle saved setting variables
-  let savedLiveMode = localStorage.getItem("liveMode");
-  if (savedLiveMode === "View") {
-    canvas.switchLiveMode(true);
-    setLive(!live);
-  }
+  initializeSettings();
 
   setInterval(()=>{
     //console.log(graph)
@@ -335,17 +353,6 @@ const barHeight = 45
 //
 
 let allCards = []
-
-
-
-
-
-
-
-
-
-
-
 
 allCards = lessons.map(lesson => {
   return (
