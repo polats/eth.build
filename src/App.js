@@ -307,6 +307,14 @@ React.useEffect(()=>{
       })
     }
   }
+
+  // handle saved setting variables
+  let savedLiveMode = localStorage.getItem("liveMode");
+  if (savedLiveMode === "View") {
+    canvas.switchLiveMode(true);
+    setLive(!live);
+  }
+
   setInterval(()=>{
     //console.log(graph)
     graph.runStep()
@@ -948,6 +956,12 @@ bottomMenu = (
       <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
 
         <span style={{margin:5,borderRight:"1px solid #cccccc",height:barHeight}} onClick={()=>{
+            if (liteGraphCanvas.live_mode === true) {
+                localStorage.setItem("liveMode", "Edit")
+            } else {
+              localStorage.setItem("liveMode", "View")
+            }
+
             liteGraphCanvas.switchLiveMode(true);
             setLive(!live)
             liteGraphCanvas.draw();
