@@ -162,7 +162,7 @@ function App() {
         break;
         case "`":
         case "~":
-          toggleShareView();
+          toggleEmbedView();
         default:
           // console.log(keydown);
         break;
@@ -202,12 +202,12 @@ function App() {
 // react state variables affected by local storage
 const [showVideoLibrary, setShowVideoLibrary] = React.useState();
 const [live, setLive] = React.useState();
-const [share, setShare] = React.useState();
+const [embed, setEmbed] = React.useState();
 
 function initializeSettings() {
   let showLibrary = localStorage.getItem("eth.build.showLibrary");
   let initialMode = localStorage.getItem("liveMode");
-  let shareView = localStorage.getItem("shareView");
+  let embedView = localStorage.getItem("embedView");
 
   setShowVideoLibrary(showLibrary === 'true');
 
@@ -221,7 +221,7 @@ function initializeSettings() {
 
   // set some settings as global variables
   global.showLibrary = showLibrary;
-  global.shareView = shareView;
+  global.embedView = embedView;
 }
 
 function resetControls() {
@@ -232,9 +232,9 @@ function resetControls() {
     setSelectToolActive(global.graph.canvas.selectToolActive)
 }
 
-function toggleShareView() {
-  localStorage.setItem("shareView", !share);
-  setShare(!share);
+function toggleEmbedView() {
+  localStorage.setItem("shareView", !embed);
+  setEmbed(!embed);
 }
 
 function toggleLiveMode() {
@@ -280,6 +280,14 @@ React.useEffect(()=>{
 
     if(url.indexOf("wof")==0){
       console.log("decompressing",url)
+
+      var urlParams = new URLSearchParams(window.location.search);
+
+      // if e key found on query string, this is an embedded share
+      if (urlParams.has('e')) {
+        setEmbed(true);
+      }
+
       codec.decompress(url).then(json => {
         console.log("configure graph with:",json)
         graph.configure( json );
@@ -478,7 +486,7 @@ let extraTabs = []
 //console.log("MENU:",menu)
 let customNodes = []
 
-if(!showVideoLibrary && !share){
+if(!showVideoLibrary && !embed){
 
   for(let n in global.customNodes){
     //console.log("GRID",global.customNodes[n])
@@ -805,7 +813,7 @@ if(!showVideoLibrary && !share){
 
 
 let clickawayscreen = ""
-if(!showVideoLibrary && !share && menu){
+if(!showVideoLibrary && !embed && menu){
   clickawayscreen = (
     <div ref={drop}  style={{position:"absolute",left:0,top:0,zIndex:1,width:"100%",height:"100%"}} onClick={()=>{setMenu("");if(global.graph&&global.graph.canvas.search_box)  global.graph.canvas.search_box.close()}}></div>
   )
@@ -814,7 +822,7 @@ if(!showVideoLibrary && !share && menu){
 let tools = ""
 
 
-if(!showVideoLibrary && !share && global.graph && global.graph.canvas){
+if(!showVideoLibrary && !embed && global.graph && global.graph.canvas){
   //console.log("TOOLSm",selectToolActive)
   tools = (
     <div>
@@ -1081,7 +1089,7 @@ bottomMenu = (
   </div>
 )
 
-if(!showVideoLibrary && !share){
+if(!showVideoLibrary && !embed){
   extraMenus = (
     <div>
       <div style={{zIndex:8,position:"fixed",right:0,top:"20%",width:50}}>
@@ -1143,7 +1151,7 @@ return (
     <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth} screenshot={currentScreenShot} />
     <LoadDialog liteGraph={liteGraph} setOpenLoadDialog={setOpenLoadDialog} openLoadDialog={openLoadDialog} dynamicWidth={dynamicWidth} live={live} />
 
-    {!share ? bottomMenu : null }
+    {!embed ? bottomMenu : null }
 
 
 
