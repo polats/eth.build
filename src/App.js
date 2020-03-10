@@ -162,7 +162,7 @@ function App() {
         break;
         case "`":
         case "~":
-          toggleDemoMode();
+          toggleShareView();
         default:
           // console.log(keydown);
         break;
@@ -202,20 +202,26 @@ function App() {
 // react state variables affected by local storage
 const [showVideoLibrary, setShowVideoLibrary] = React.useState();
 const [live, setLive] = React.useState();
+const [share, setShare] = React.useState();
 
 function initializeSettings() {
   let showLibrary = localStorage.getItem("eth.build.showLibrary");
   let initialMode = localStorage.getItem("liveMode");
+  let shareView = localStorage.getItem("shareView");
 
   setShowVideoLibrary(showLibrary === 'true');
-  setLive(initialMode);
 
-  if (initialMode === "View") {
-    toggleLiveMode();
-  }
+  // uncomment to enable saving of initial states
+  // setLive(initialMode);
+  // setShare(shareView === 'true');
+  //
+  // if (initialMode === "View") {
+  //   toggleLiveMode();
+  // }
 
   // set some settings as global variables
   global.showLibrary = showLibrary;
+  global.shareView = shareView;
 }
 
 function resetControls() {
@@ -226,9 +232,9 @@ function resetControls() {
     setSelectToolActive(global.graph.canvas.selectToolActive)
 }
 
-function toggleDemoMode() {
-
-
+function toggleShareView() {
+  localStorage.setItem("shareView", !share);
+  setShare(!share);
 }
 
 function toggleLiveMode() {
@@ -472,7 +478,7 @@ let extraTabs = []
 //console.log("MENU:",menu)
 let customNodes = []
 
-if(!showVideoLibrary){
+if(!showVideoLibrary && !share){
 
   for(let n in global.customNodes){
     //console.log("GRID",global.customNodes[n])
@@ -799,7 +805,7 @@ if(!showVideoLibrary){
 
 
 let clickawayscreen = ""
-if(!showVideoLibrary && menu){
+if(!showVideoLibrary && !share && menu){
   clickawayscreen = (
     <div ref={drop}  style={{position:"absolute",left:0,top:0,zIndex:1,width:"100%",height:"100%"}} onClick={()=>{setMenu("");if(global.graph&&global.graph.canvas.search_box)  global.graph.canvas.search_box.close()}}></div>
   )
@@ -808,7 +814,7 @@ if(!showVideoLibrary && menu){
 let tools = ""
 
 
-if(!showVideoLibrary && global.graph&&global.graph.canvas){
+if(!showVideoLibrary && !share && global.graph && global.graph.canvas){
   //console.log("TOOLSm",selectToolActive)
   tools = (
     <div>
@@ -1075,7 +1081,7 @@ bottomMenu = (
   </div>
 )
 
-if(!showVideoLibrary){
+if(!showVideoLibrary && !share){
   extraMenus = (
     <div>
       <div style={{zIndex:8,position:"fixed",right:0,top:"20%",width:50}}>
@@ -1137,7 +1143,7 @@ return (
     <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth} screenshot={currentScreenShot} />
     <LoadDialog liteGraph={liteGraph} setOpenLoadDialog={setOpenLoadDialog} openLoadDialog={openLoadDialog} dynamicWidth={dynamicWidth} live={live} />
 
-    {bottomMenu}
+    {!share ? bottomMenu : null }
 
 
 
