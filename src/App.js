@@ -8,25 +8,38 @@ import CustomNodes from './CustomNodes'
 // import ICON from './icon.png'
 import StackGrid from "react-stack-grid";
 
-import QrReader from "react-qr-reader";
+// import QrReader from "react-qr-reader";
 
 import Dragger from './Dragger.js';
 import { useDrop } from 'react-dnd'
 
-import { Icon, Tooltip, Button, CardActions, Divider, Drawer, Card, CardMedia, CardContent, CardActionArea, Typography } from '@material-ui/core';
+import { Icon,
+        Tooltip,
+        Drawer,
+        /*
+        Button,
+        CardActions,
+        Divider,
+        Card,
+        CardMedia,
+        CardContent,
+        CardActionArea,
+        Typography
+        */
+      } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import lessons from './data/lessons';
+// import lessons from './data/lessons';
 
-import SaveDialog from "./dialogs/SaveDialog";
-import LoadDialog from "./dialogs/LoadDialog";
+// import SaveDialog from "./dialogs/SaveDialog";
+// import LoadDialog from "./dialogs/LoadDialog";
 import AboutDialog from './dialogs/AboutDialog';
 import SettingsDialog from './dialogs/SettingsDialog';
 
 import html2canvas from 'html2canvas';
 
 var codec = require('json-url')('lzw');
-var QRCode = require('qrcode.react')
+// var QRCode = require('qrcode.react')
 const axios = require('axios');
 
 
@@ -368,6 +381,7 @@ const barHeight = 45
 
 let allCards = []
 
+/*
 allCards = lessons.map(lesson => {
   return (
     <Card className={classes.card}>
@@ -412,6 +426,7 @@ allCards = lessons.map(lesson => {
     </Card>
   )
 })
+*/
 
 
 /* FOR TOP MENU FOR TABLETS:
@@ -1118,6 +1133,8 @@ let qrReader = ""
 if(readQr){
   qrReader = (
     <div style={{zIndex:5,position:"absolute",left:0,top:0,width:"100%",height:"100%",backgroundColor:"#111111",}} onClick={()=>{setReadQr(false)}}>
+
+    {/*
       <QrReader
         delay={500}
         onError={(e)=>{
@@ -1136,6 +1153,7 @@ if(readQr){
         style={{ margin:"auto", maxWidth: "80%", maxHeight: "80%"}}
         resolution={1200}
       />
+    */}
     </div>
   )
 }
@@ -1148,9 +1166,12 @@ return (
 
     <AboutDialog setOpenAboutDialog={setOpenAboutDialog} openAboutDialog={openAboutDialog}/>
     <SettingsDialog setOpenSettingsDialog={setOpenSettingsDialog} openSettingsDialog={openSettingsDialog}/>
+    {
+    /*
     <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth} screenshot={currentScreenShot} />
     <LoadDialog liteGraph={liteGraph} setOpenLoadDialog={setOpenLoadDialog} openLoadDialog={openLoadDialog} dynamicWidth={dynamicWidth} live={live} />
-
+    */
+    }
     {!embed ? bottomMenu : null }
 
 
