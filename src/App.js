@@ -222,11 +222,15 @@ function initializeSettings() {
   let initialMode = localStorage.getItem("liveMode");
   let embedView = localStorage.getItem("embedView");
 
+  // load without menus as default
+  setEmbed(true);
+
   setShowVideoLibrary(showLibrary === 'true');
+  // setEmbed(embedView === 'true');
 
   // uncomment to enable saving of initial states
   // setLive(initialMode);
-  // setShare(shareView === 'true');
+  // setEmbed(embedView === 'true');
   //
   // if (initialMode === "View") {
   //   toggleLiveMode();
