@@ -6,7 +6,7 @@ import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Text() {
-  this.properties =  {titleColor: "#222", fontSize: 44,blockieSize: 50,placeholder:"",title:"Title",fontFamily:"'Rubik Mono One', sans-serif",color:"#dddddd"}
+  this.properties =  {fontSize: 44,blockieSize: 50,placeholder:"",title:"Title",fontFamily:"'Rubik Mono One', sans-serif",color:"#dddddd"}
   this.size = [500, 0];
   this.interval = 1000;
   this.time = 0;
@@ -14,19 +14,17 @@ function Text() {
   this.min = 38344562324;
   this.max = 62211353213;
   this.addInput("", -1);
+  this.addInput("", -1);
+  this.addInput("", -1);
   this.addOutput("", -1);
-	this.horizontal = false;
+	this.horizontal = true;
 
   this.displayNum = Math.floor(Math.random() * (this.max - this.min) + this.min);
 }
 
 Text.title = "Title";
-Text.title_color = "#222";
+Text.title_color = "#222"
 //Text.bgcolor ="#000"
-
-Text.prototype.onPropertyChanged = function() {
-Text.title_color = this.properties.titleColor;
-}
 
 Text.prototype.onExecute = function() {
   var dt = this.graph.elapsed_time * 1000; //in ms

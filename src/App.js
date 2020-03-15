@@ -42,7 +42,7 @@ var codec = require('json-url')('lzw');
 // var QRCode = require('qrcode.react')
 const axios = require('axios');
 
-var defaultGraph = require('./graphs/dvg1.json')
+var defaultGraph = require('./graphs/dvg2.json')
 
 
 const useStyles = makeStyles({

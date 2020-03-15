@@ -135,6 +135,7 @@ Web2Player.prototype.onDrawBackground = function() {
           mouthType={this.mouthType}
           {...this.avatarSettings}
         />
+        <br/>
         {this.cash}
       </div>
     )
