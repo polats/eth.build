@@ -42,6 +42,8 @@ var codec = require('json-url')('lzw');
 // var QRCode = require('qrcode.react')
 const axios = require('axios');
 
+var defaultGraph = require('./graphs/dvg1.json')
+
 
 const useStyles = makeStyles({
   card: {
@@ -369,6 +371,9 @@ React.useEffect(()=>{
   }
 
   initializeSettings();
+
+  // load default
+  global.graph.configure( defaultGraph );
 
   setInterval(()=>{
     //console.log(graph)
